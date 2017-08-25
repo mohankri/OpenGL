@@ -29,16 +29,19 @@ static void window_callback(GLFWwindow *window, int key, int scancode, int actio
 int main(int argc, char *argv[])
 {
     GLFWwindow *window;
+    int major, minor, revision;
     glfwSetErrorCallback(handle_callback);
     
-    //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    cout << glfwGetVersionString() << endl;
-    /* initialize GLFW */
+        /* initialize GLFW */
     if (!glfwInit()) {
         fprintf(stderr, "ERROR: could not start GLFW3");
         return 1;
     }
+    glfwGetVersion(&major, &minor, &revision);
+    cout << major << "." << minor <<"." << revision << endl;
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    cout << glfwGetVersionString() << endl;
     
     window = glfwCreateWindow(1024, 768, "OpenGL", NULL, NULL);
     if (!window) {
@@ -46,6 +49,12 @@ int main(int argc, char *argv[])
         cout << "Error Creating Window " << endl;
         return 1;
     }
+    /*
+     GLFW has two primary coordinates: virtual screens and windows(content) area.
+     coordinates doesn't necessarily means pixel.
+     */
+    // make OpenGL context current
+    glfwMakeContextCurrent(window);
     
     // window specific callback
     glfwSetKeyCallback(window, window_callback);
